@@ -2,8 +2,15 @@
   "name": "@otchy/scalable-dots-cli",
   "version": "0.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "scalable-dots": "dist/index.js"
+  },
   "scripts": {
+    "prebuild": "rm -rf dist/*",
+    "build": "tsc",
     "test": "jest"
   },
   "repository": {
@@ -15,5 +22,12 @@
   "bugs": {
     "url": "https://github.com/otchy210/scalable-dots-cli/issues"
   },
-  "homepage": "https://github.com/otchy210/scalable-dots-cli#readme"
+  "homepage": "https://github.com/otchy210/scalable-dots-cli#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.31",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "@otchy/scalable-dots-core": "^0.0.0"
+  }
 }
