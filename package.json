@@ -1,16 +1,16 @@
 {
   "name": "@otchy/scalable-dots-cli",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "files": [
     "dist"
   ],
   "bin": {
-    "scalable-dots": "dist/index.js"
+    "scalable-dots": "dist/scalable-dots"
   },
   "scripts": {
     "prebuild": "rm -rf dist/*",
-    "build": "tsc",
+    "build": "tsc && cp src/scalable-dots dist/",
     "test": "jest"
   },
   "repository": {
