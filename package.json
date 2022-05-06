@@ -1,6 +1,6 @@
 {
   "name": "@otchy/scalable-dots-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "files": [
     "dist"
@@ -31,6 +31,6 @@
     "typescript": "^4.6.4"
   },
   "dependencies": {
-    "@otchy/scalable-dots-core": "^0.0.0"
+    "@otchy/scalable-dots-core": "^0.0.3"
   }
 }
