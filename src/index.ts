@@ -1,3 +1,5 @@
 import { hello } from '@otchy/scalable-dots-core';
 
-hello('Otchy');
+export const sayHello = () => {
+  hello('Otchy');
+};
