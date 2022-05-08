@@ -1,6 +1,6 @@
 {
   "name": "@otchy/scalable-dots-cli",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
   "engines": {
     "node": ">=18"
@@ -14,7 +14,10 @@
   "scripts": {
     "prebuild": "rm -rf dist/*",
     "build": "tsc && cp src/scalable-dots dist/",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "lint:format": "prettier --write ."
   },
   "repository": {
     "type": "git",
