@@ -1,5 +1,6 @@
 import { DotType } from '@otchy/scalable-dots-core/dist/esm/types';
-import * as yargs from 'yargs';
+import yargs from 'yargs/yargs';
+import { hideBin } from 'yargs/helpers';
 
 type Options = {
   files: string[];
@@ -9,14 +10,14 @@ type Options = {
   prettyPrint: boolean;
 };
 
-const parseOptions = async (): Promise<Options> => {
+export const parseOptions = async (argv = process.argv): Promise<Options> => {
   const {
     _: files,
     type,
     size,
     gap,
     prettyPrint,
-  } = await yargs
+  } = await yargs(hideBin(argv))
     .option('type', {
       type: 'string',
       description: 'Type of dots',
@@ -49,8 +50,7 @@ const parseOptions = async (): Promise<Options> => {
   };
 };
 
-export const main = async () => {
-  const options = await parseOptions();
+export const main = async (argv = process.argv) => {
+  const options = await parseOptions(argv);
   console.log(options);
 };
-main();
