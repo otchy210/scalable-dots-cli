@@ -3,9 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.main = void 0;
+exports.main = exports.validateFiles = exports.parseOptions = void 0;
 const yargs_1 = __importDefault(require("yargs/yargs"));
 const helpers_1 = require("yargs/helpers");
+const fs_1 = require("fs");
+const sharp_1 = __importDefault(require("sharp"));
 const parseOptions = async (argv = process.argv) => {
     const { _: files, type, size, gap, prettyPrint, } = await (0, yargs_1.default)((0, helpers_1.hideBin)(argv))
         .option('type', {
@@ -39,8 +41,32 @@ const parseOptions = async (argv = process.argv) => {
         prettyPrint,
     };
 };
+exports.parseOptions = parseOptions;
+const validateFiles = async (files) => {
+    if (files.length === 0) {
+        throw new Error('One input file is required');
+    }
+    if (files.length > 1) {
+        throw new Error('Multiple input files are not supported.');
+    }
+    const file = files[0];
+    if (!(0, fs_1.existsSync)(file)) {
+        throw new Error(`${file} doesn't exist.`);
+    }
+    return file;
+};
+exports.validateFiles = validateFiles;
 const main = async (argv = process.argv) => {
-    const options = await parseOptions(argv);
-    console.log(options);
+    const options = await (0, exports.parseOptions)(argv);
+    const file = await (0, exports.validateFiles)(options.files).catch((e) => {
+        console.error(e.message);
+        process.exit(1);
+    });
+    const image = (0, sharp_1.default)(file);
+    const meta = await image.metadata().catch((e) => {
+        console.error(e.message);
+        process.exit(1);
+    });
+    console.log(meta);
 };
 exports.main = main;

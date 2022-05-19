@@ -1,6 +1,8 @@
 import { DotType } from '@otchy/scalable-dots-core/dist/esm/types';
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
+import { existsSync } from 'fs';
+import sharp from 'sharp';
 
 type Options = {
   files: string[];
@@ -50,7 +52,30 @@ export const parseOptions = async (argv = process.argv): Promise<Options> => {
   };
 };
 
+export const validateFiles = async (files: string[]) => {
+  if (files.length === 0) {
+    throw new Error('One input file is required');
+  }
+  if (files.length > 1) {
+    throw new Error('Multiple input files are not supported');
+  }
+  const file = files[0];
+  if (!existsSync(file)) {
+    throw new Error(`"${file}" doesn't exist`);
+  }
+  return file;
+};
+
 export const main = async (argv = process.argv) => {
   const options = await parseOptions(argv);
-  console.log(options);
+  const file = await validateFiles(options.files).catch((e: Error) => {
+    console.error(e.message);
+    process.exit(1);
+  });
+  const image = sharp(file);
+  const meta = await image.metadata().catch((e) => {
+    console.error(e.message);
+    process.exit(1);
+  });
+  console.log(meta);
 };

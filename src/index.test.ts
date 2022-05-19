@@ -1,4 +1,4 @@
-import { parseOptions } from '.';
+import { parseOptions, validateFiles } from '.';
 
 describe('parseOptions', () => {
   it('returns default options when argv is empty', async () => {
@@ -29,5 +29,23 @@ describe('parseOptions', () => {
       gap: 0,
       prettyPrint: true,
     });
+  });
+});
+
+describe('validateFiles', () => {
+  it('throws an error when no file is given', () => {
+    expect(() => {
+      validateFiles([]);
+    }).toThrowError('One input file is required');
+  });
+  it('throws an error when multiple files are given', () => {
+    expect(() => {
+      validateFiles(['file1', 'file2']);
+    }).toThrowError('Multiple input files are not supported');
+  });
+  it("throws an error when given file doesn't exist", () => {
+    expect(() => {
+      validateFiles(['dummy']);
+    }).toThrowError("dummy doesn't exist.");
   });
 });
