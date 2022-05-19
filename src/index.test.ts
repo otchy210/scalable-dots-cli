@@ -33,19 +33,19 @@ describe('parseOptions', () => {
 });
 
 describe('validateFiles', () => {
-  it('throws an error when no file is given', () => {
-    expect(() => {
-      validateFiles([]);
-    }).toThrowError('One input file is required');
+  it('throws an error when no file is given', async () => {
+    await expect(validateFiles([])).rejects.toThrowError(
+      'One input file is required'
+    );
   });
-  it('throws an error when multiple files are given', () => {
-    expect(() => {
-      validateFiles(['file1', 'file2']);
-    }).toThrowError('Multiple input files are not supported');
+  it('throws an error when multiple files are given', async () => {
+    await expect(validateFiles(['file1', 'file2'])).rejects.toThrowError(
+      'Multiple input files are not supported'
+    );
   });
-  it("throws an error when given file doesn't exist", () => {
-    expect(() => {
-      validateFiles(['dummy']);
-    }).toThrowError("dummy doesn't exist.");
+  it("throws an error when given file doesn't exist", async () => {
+    await expect(validateFiles(['dummy'])).rejects.toThrowError(
+      '"dummy" doesn\'t exist'
+    );
   });
 });
