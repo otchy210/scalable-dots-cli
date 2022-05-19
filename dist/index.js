@@ -47,11 +47,11 @@ const validateFiles = async (files) => {
         throw new Error('One input file is required');
     }
     if (files.length > 1) {
-        throw new Error('Multiple input files are not supported.');
+        throw new Error('Multiple input files are not supported');
     }
     const file = files[0];
     if (!(0, fs_1.existsSync)(file)) {
-        throw new Error(`${file} doesn't exist.`);
+        throw new Error(`"${file}" doesn't exist`);
     }
     return file;
 };
@@ -67,6 +67,12 @@ const main = async (argv = process.argv) => {
         console.error(e.message);
         process.exit(1);
     });
-    console.log(meta);
+    const raw = await image.ensureAlpha().raw().toBuffer();
+    const imageData = {
+        width: meta.width,
+        height: meta.height,
+        data: [...raw],
+    };
+    console.log(imageData);
 };
 exports.main = main;

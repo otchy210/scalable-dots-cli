@@ -77,5 +77,11 @@ export const main = async (argv = process.argv) => {
     console.error(e.message);
     process.exit(1);
   });
-  console.log(meta);
+  const raw = await image.ensureAlpha().raw().toBuffer();
+  const imageData = {
+    width: meta.width,
+    height: meta.height,
+    data: [...raw],
+  };
+  console.log(imageData);
 };
