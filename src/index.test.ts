@@ -48,4 +48,9 @@ describe('validateFiles', () => {
       '"dummy" doesn\'t exist'
     );
   });
+  it('returns proper file path when given file exists', async () => {
+    await expect(validateFiles(['test/image.png'])).resolves.toBe(
+      'test/image.png'
+    );
+  });
 });
