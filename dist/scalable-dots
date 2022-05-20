@@ -1,4 +1,7 @@
 #!/usr/bin/env node
 
 const { main } = require('./index.js');
-main();
+
+main().then((exitStatus) => {
+  process.exit(exitStatus);
+});

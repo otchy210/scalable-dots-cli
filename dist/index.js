@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.main = exports.validateFiles = exports.parseOptions = void 0;
+exports.main = exports.convertToXml = exports.validateFiles = exports.parseOptions = void 0;
 const yargs_1 = __importDefault(require("yargs/yargs"));
 const helpers_1 = require("yargs/helpers");
 const fs_1 = require("fs");
@@ -57,20 +57,12 @@ const validateFiles = async (files) => {
     return file;
 };
 exports.validateFiles = validateFiles;
-const main = async (argv = process.argv) => {
-    const options = await (0, exports.parseOptions)(argv);
-    const file = await (0, exports.validateFiles)(options.files).catch((e) => {
-        console.error(e.message);
-        process.exit(1);
-    });
+const convertToXml = async (options) => {
+    const file = options.files[0];
     const image = (0, sharp_1.default)(file);
-    const meta = await image.metadata().catch((e) => {
-        console.error(e.message);
-        process.exit(1);
-    });
+    const meta = await image.metadata();
     if (meta.width === undefined || meta.height === undefined) {
-        console.error('Failed to load metadata', meta);
-        process.exit(1);
+        throw new Error(`Failed to load metadata: ${meta.toString()}`);
     }
     const raw = await image.ensureAlpha().raw().toBuffer();
     const imageData = {
@@ -86,10 +78,28 @@ const main = async (argv = process.argv) => {
     };
     const dots = (0, scalable_dots_core_1.scalableDots)(props);
     if (options.prettyPrint) {
-        process.stdout.write(dots.toPrettyXml());
+        return dots.toPrettyXml();
     }
     else {
-        process.stdout.write(dots.toMinifiedXml());
+        return dots.toMinifiedXml();
     }
+};
+exports.convertToXml = convertToXml;
+const main = async (argv = process.argv) => {
+    const options = await (0, exports.parseOptions)(argv);
+    const file = await (0, exports.validateFiles)(options.files).catch((e) => {
+        console.error(e.message);
+    });
+    if (!file) {
+        return 1;
+    }
+    const xml = await (0, exports.convertToXml)(options).catch((e) => {
+        console.error(e.message);
+    });
+    if (!xml) {
+        return 1;
+    }
+    process.stdout.write(xml);
+    return 0;
 };
 exports.main = main;

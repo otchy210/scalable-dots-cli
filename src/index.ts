@@ -9,7 +9,7 @@ import { existsSync } from 'fs';
 import sharp from 'sharp';
 import { scalableDots } from '@otchy/scalable-dots-core';
 
-type Options = {
+export type Options = {
   files: string[];
   type: DotType;
   size: number;
@@ -71,20 +71,12 @@ export const validateFiles = async (files: string[]) => {
   return file;
 };
 
-export const main = async (argv = process.argv) => {
-  const options = await parseOptions(argv);
-  const file = await validateFiles(options.files).catch((e: Error) => {
-    console.error(e.message);
-    process.exit(1);
-  });
+export const convertToXml = async (options: Options) => {
+  const file = options.files[0];
   const image = sharp(file);
-  const meta = await image.metadata().catch((e) => {
-    console.error(e.message);
-    process.exit(1);
-  });
+  const meta = await image.metadata();
   if (meta.width === undefined || meta.height === undefined) {
-    console.error('Failed to load metadata', meta);
-    process.exit(1);
+    throw new Error(`Failed to load metadata: ${meta.toString()}`);
   }
   const raw = await image.ensureAlpha().raw().toBuffer();
   const imageData: ImageData = {
@@ -100,8 +92,26 @@ export const main = async (argv = process.argv) => {
   };
   const dots = scalableDots(props);
   if (options.prettyPrint) {
-    process.stdout.write(dots.toPrettyXml());
+    return dots.toPrettyXml();
   } else {
-    process.stdout.write(dots.toMinifiedXml());
+    return dots.toMinifiedXml();
   }
+};
+
+export const main = async (argv = process.argv): Promise<number> => {
+  const options = await parseOptions(argv);
+  const file = await validateFiles(options.files).catch((e: Error) => {
+    console.error(e.message);
+  });
+  if (!file) {
+    return 1;
+  }
+  const xml = await convertToXml(options).catch((e) => {
+    console.error(e.message);
+  });
+  if (!xml) {
+    return 1;
+  }
+  process.stdout.write(xml);
+  return 0;
 };
