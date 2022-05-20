@@ -8,6 +8,7 @@ const yargs_1 = __importDefault(require("yargs/yargs"));
 const helpers_1 = require("yargs/helpers");
 const fs_1 = require("fs");
 const sharp_1 = __importDefault(require("sharp"));
+const scalable_dots_core_1 = require("@otchy/scalable-dots-core");
 const parseOptions = async (argv = process.argv) => {
     const { _: files, type, size, gap, prettyPrint, } = await (0, yargs_1.default)((0, helpers_1.hideBin)(argv))
         .option('type', {
@@ -24,7 +25,7 @@ const parseOptions = async (argv = process.argv) => {
         .option('gap', {
         type: 'number',
         description: 'Gap between dots',
-        default: 2,
+        default: 1,
     })
         .option('pretty-print', {
         type: 'boolean',
@@ -67,12 +68,28 @@ const main = async (argv = process.argv) => {
         console.error(e.message);
         process.exit(1);
     });
+    if (meta.width === undefined || meta.height === undefined) {
+        console.error('Failed to load metadata', meta);
+        process.exit(1);
+    }
     const raw = await image.ensureAlpha().raw().toBuffer();
     const imageData = {
         width: meta.width,
         height: meta.height,
-        data: [...raw],
+        data: new Uint8ClampedArray(raw),
     };
-    console.log(imageData);
+    const props = {
+        imageData,
+        type: options.type,
+        size: options.size,
+        gap: options.gap,
+    };
+    const dots = (0, scalable_dots_core_1.scalableDots)(props);
+    if (options.prettyPrint) {
+        process.stdout.write(dots.toPrettyXml());
+    }
+    else {
+        process.stdout.write(dots.toMinifiedXml());
+    }
 };
 exports.main = main;

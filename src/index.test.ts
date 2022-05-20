@@ -7,7 +7,7 @@ describe('parseOptions', () => {
       files: [],
       type: 'SQUARE',
       size: 16,
-      gap: 2,
+      gap: 1,
       prettyPrint: false,
     });
   });
