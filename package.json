@@ -1,6 +1,6 @@
 {
   "name": "@otchy/scalable-dots-cli",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "",
   "engines": {
     "node": ">=18"
@@ -15,6 +15,7 @@
     "prebuild": "rm -rf dist/*",
     "build": "tsc && cp src/scalable-dots dist/ && chmod +x dist/scalable-dots",
     "test": "jest",
+    "test:u": "jest --updateSnapshot",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "lint:format": "prettier --write .",
@@ -35,7 +36,7 @@
   },
   "devDependencies": {
     "@jest/types": "^28.1.0",
-    "@otchy/scalable-dots-core": "^0.2.3",
+    "@otchy/scalable-dots-core": "^0.2.5",
     "@types/jest": "^27.5.0",
     "@types/node": "^17.0.31",
     "@types/sharp": "^0.30.2",
