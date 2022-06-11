@@ -1,6 +1,6 @@
 {
   "name": "@otchy/scalable-dots-cli",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "",
   "engines": {
     "node": ">=18"
@@ -36,7 +36,6 @@
   },
   "devDependencies": {
     "@jest/types": "^28.1.0",
-    "@otchy/scalable-dots-core": "^0.2.5",
     "@types/jest": "^27.5.0",
     "@types/node": "^17.0.31",
     "@types/sharp": "^0.30.2",
@@ -52,6 +51,7 @@
     "typescript": "^4.6.4"
   },
   "dependencies": {
+    "@otchy/scalable-dots-core": "^0.2.5",
     "sharp": "^0.30.6",
     "yargs": "^17.5.1"
   }
