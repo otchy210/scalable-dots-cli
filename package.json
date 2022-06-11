@@ -1,6 +1,6 @@
 {
   "name": "@otchy/scalable-dots-cli",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "",
   "engines": {
     "node": ">=18"
@@ -47,12 +47,12 @@
     "eslint-config-prettier": "^8.5.0",
     "jest": "^28.1.0",
     "prettier": "^2.6.2",
-    "sharp": "^0.30.4",
     "ts-jest": "^28.0.1",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.4"
   },
   "dependencies": {
+    "sharp": "^0.30.6",
     "yargs": "^17.5.1"
   }
 }
